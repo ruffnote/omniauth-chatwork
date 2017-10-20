@@ -4,10 +4,6 @@
 
 http://developer.chatwork.com/ja/
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/omniauth/chatwork`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -16,15 +12,9 @@ Add this line to your application's Gemfile:
 gem 'omniauth-chatwork'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install omniauth-chatwork
-
 ## Usage
+
+example/README.mdに記載
 
 - RubyOnRailsでの設定方法について
 
@@ -32,16 +22,43 @@ Or install it yourself as:
 # config/initializers/omniauth.rb
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :chatwork, ENV['CHATWORK_CLIENT_ID'], ENV['CHATWORK_CLIENT_SECRET']
+  provider :chatwork, ENV['CHATWORK_CLIENT_ID'], ENV['CHATWORK_CLIENT_SECRET'], scope: 'xxx'
 end
 OmniAuth.config.logger = Rails.logger
 ```
 
-## Development
+```
+# cofig/routes
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Rails.application.routes.draw do
+  get '/auth/chatwork/callback', to: 'welcome#callback'
+end
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+```
+# call chatwork api
+
+<%= link_to 'CHATWORK OAUTH', '/auth/chatwork' %>
+```
+
+```
+# welcome#callback
+
+def callback
+  @auth = auth
+  otken = auth.credentials.token
+
+  client = OAuth2::Client.new(ENV['CHATWORK_CLIENT_ID'], ENV['CHATWORK_CLIENT_SECRET'], site: 'https://api.chatwork.com')
+  access_token = OAuth2::AccessToken.new(client, token)
+  # access_token.refresh! if access_token.expired?
+end
+
+private
+def auth
+  request.env['omniauth.auth']
+end
+```
 
 ## Contributing
 
@@ -50,7 +67,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Omniauth::Chatwork project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/omniauth-chatwork/blob/master/CODE_OF_CONDUCT.md).
