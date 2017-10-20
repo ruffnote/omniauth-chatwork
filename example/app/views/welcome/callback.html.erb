@@ -1,3 +1,16 @@
-<%= @teams.to_json %>
+<!-- <p> -->
+<!--   <%= @teams.to_json %> -->
+<!-- </p> -->
 
-<%= @token.to_json %>
+<hr>
+
+<p>AUTH: <%= @auth.to_json %></p>
+
+<hr>
+
+<p>UID: <%= @auth.uid %></p>
+<p>NickName: <%= @auth.info.nickname %></p>
+<p>Email: <%= @auth.info.email %></p>
+<p><%= image_tag(@auth.info.image) %></p>
+
+<p><%= link_to 'Go To TopPage', root_path %></p>
