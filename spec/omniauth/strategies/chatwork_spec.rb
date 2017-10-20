@@ -57,14 +57,26 @@ RSpec.describe OmniAuth::Strategies::ChatWork do
   end
 
   context '#info' do
-    pending 'should use nickname, image rom raw_info'
+    it 'should use name, image, email, nickname from raw_info' do
+      allow(subject).to receive(:raw_info).and_return({ 'name' => 'lastname.firstname', 'avatar_image_url' => 'http://example.com/image.png', 'login_mail' => 'hoge@example.com', 'chatwork_id' => 'me' })
+      expect(subject.info[:name]).to eq 'lastname.firstname'
+      expect(subject.info[:image]).to eq 'http://example.com/image.png'
+      expect(subject.info[:email]).to eq 'hoge@example.com'
+      expect(subject.info[:nickname]).to eq 'me'
+    end
   end
 
   context '#extra' do
-    pending 'should use raw_info'
+    it 'should use raw_info' do
+      allow(subject).to receive(:raw_info).and_return({})
+      expect(subject.extra[:raw_info]).to eq({})
+    end
   end
 
   context '#raw_info' do
-    pending 'should use me api'
+    it 'should use me api' do
+      expect(access_token).to receive(:get).with('/v2/me').and_return(response)
+      expect(subject.raw_info).to eq parsed_response
+    end
   end
 end
