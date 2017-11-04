@@ -1,0 +1,5 @@
+example/.env
+example/tmp/*
+example/log/*
+.rspec_status
+
