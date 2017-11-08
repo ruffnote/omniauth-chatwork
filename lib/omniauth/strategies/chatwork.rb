@@ -19,7 +19,7 @@ module OmniAuth
           'name': raw_info['name'],
           'image': raw_info['avatar_image_url'],
           'email': raw_info['login_mail'],
-          'nickname': raw_info['chatwork_id'],
+          'chatwork_id': raw_info['chatwork_id'],
         }
       end
 
